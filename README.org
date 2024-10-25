@@ -1,0 +1,165 @@
+* K.A.R.O.T (Karma And Reward for Obedience Training)
+
+KAROT is a motivation and reward system designed to aid parents to achieve their
+child-training goals.
+
+** Basic Usage
+
+The KAROT device is designed to work in conjunction with a star chart or similar
+behaviour monitoring system.
+
+At the start of a KAROT cycle, the parents and the child agree on some prize or
+reward to aim for and how many stars or behaviour points are required to obtain
+it.
+
+The KAROT device is then loaded up with that number of balls.
+
+The child is now allowed to release one ball for every behaviour point
+awarded.
+
+When all balls are released, the child gets the reward.
+
+The child can get the reward quickest by behaving well and scoring maximum
+behaviour points.
+
+If the child does something very naughty, more balls can be added as punishment.
+
+** Modes and How to Switch Between Them
+
+When switched on, the device should start up in 'Normal' mode.
+
+To switch modes, press button A and button B simultaneously. You should now see
+a flashing number representing the number of the mode that you are currently
+in. Use buttons A and B to change to the number of the mode that you want to
+switch to, then press A and B simultaneously again to switch to that mode. The
+display should stop flashing, indicating that you are no longer in
+mode-switching mode.
+
+Here are the modes and their numbers:
+1. Normal Mode
+2. Input Remainder Mode
+3. Auto-Drop Mode
+4. Manual Motor Mode
+5. Manual Solenoid Mode
+6. Input Test Mode
+7. LED Test Mode
+8. Display Test Mode
+9. Sound Test Mode
+10. Winner Sequence Test Mode
+11. Reset Mode
+
+** 1: Normal Mode
+The LED matrix displays the balls-granted number.
+
+If balls-granted is greater than zero, the trigger lights up green and is
+active, otherwise it is red and inactive.
+
+Each time a ball is dropped, the balls-granted number decreases by one.
+
+Use buttons A and B to adjust the balls-granted number.
+
+** 2: Input Remainder Mode
+The LED matrix will display the balls-remaining number. Use A and B buttons to
+adjust the number up or down.
+
+You can also reset the number to zero by activating reset-mode.
+
+** 3: Auto-Drop Mode
+When in auto-drop mode, press the trigger button to begin auto-dropping.
+
+When auto-drop is activated, the device will keep on looping the ball-drop
+sequence until balls-remaining reaches zero, triggering the winner-sequence. The
+balls-granted number is ignored.
+
+While auto-drop is active, press the trigger again to stop auto-drop.
+
+In auto-drop mode, the trigger is always green, provided that balls-remaining is
+greater than zero. When auto-drop is active the green light pulses.
+
+** 4: Manual Motor Mode
+Manually control the motor forwards and backwards using buttons A and B.
+
+** 5: Manual Solenoid Mode
+
+** 6: Input Test Mode
+Display letter code for any input switch when it is activated (only handles one switch at a time).
+
+Input Codes:
+- - = no inputs
+- A = microbit button A
+- B = microbit button B
+- a = secret button A
+- b = secret button B
+- T = trigger
+- < = forward limit-switch
+- > = backward limit-switch
+- i = ball-input switch
+- D = top door open
+
+** 7: LED Test Mode
+Use buttons A and B to switch between the different LED test routines.
+
+0 = off
+
+1. red
+2. yellow
+3. green
+4. cyan
+5. blue
+6. magenta
+7. colour cycle (slow)
+8. colour cycle (fast)
+9. colour fade (slow)
+10. colour fade (fast)
+
+** 8: Display Test Mode
+
+** 9: Sound Test Mode
+
+** 10: Winner Sequence Test Mode
+
+** 11:. Reset Mode
+Press the trigger button to reset everything to default settings:
+
+- balls-remaining = 0
+- balls-granted = 0
+- all LEDs off
+
+* Hardware
+
+* Technical Overview
+
+Microbit and Arduino are connected by I2C. Microbit is the master and Arduino is
+slave.
+
+* Development Process
+
+I wanted to use Microbit because I thought that I could use the 5x5 LED matrix
+to display the number of ball-drops granted, and I also thought I could easily
+use another microbit (communicating via BLE radio) as a parental remote control
+device, for magically incrementing the balls-granted number.
+
+After working through the design a bit I wasn't sure that the microbit would
+offer enough GPIO pins for my requirements, so I added an Arduino Nano, which
+does most of the work, while the Microbit serves as display and user interface.
+
+* Circuit Diagram
+
+* Software Dependencies
+- Wire.h
+- Adafruit_Microbit.h
+
+* JOBS TO DO
+** add reset mode
+** custom display routine - scroll text without hanging up loop execution
+** add missing LED test routines
+** add sound
+** add solenoids (winner mechanism & top door release)
+** second microbit as parental remote control
+I thought that it would be easy to make two microbits talk via BLE, but it
+turned out a bit more complicated, so I haven't yet implemented it. Instead,
+I've added two secret input buttons discretely tucked away on the rear of the
+device. Microbit to microbit radio communication is a feature which is promoted
+as a codeblocks example for school children, however, I don't want to program
+with codeblocks. I'm programming in C using Arduino IDE and no one online seems
+to have a nice example for me to follow in C.
