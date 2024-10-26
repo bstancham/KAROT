@@ -1,7 +1,7 @@
 * K.A.R.O.T (Karma And Reward for Obedience Training)
 
-KAROT is a motivation and reward system designed to aid parents to achieve their
-child-training goals.
+KAROT is a hardware-based motivation and reward system designed to aid parents
+to achieve their child-training goals.
 
 ** Basic Usage
 
@@ -132,6 +132,12 @@ Press the trigger button to reset everything to default settings:
 Microbit and Arduino are connected by I2C. Microbit is the master and Arduino is
 slave.
 
+* Circuit Diagram
+
+* Software Dependencies
+- Wire.h
+- Adafruit_Microbit.h
+
 * Development Process
 
 I wanted to use Microbit because I thought that I could use the 5x5 LED matrix
@@ -142,12 +148,6 @@ device, for magically incrementing the balls-granted number.
 After working through the design a bit I wasn't sure that the microbit would
 offer enough GPIO pins for my requirements, so I added an Arduino Nano, which
 does most of the work, while the Microbit serves as display and user interface.
-
-* Circuit Diagram
-
-* Software Dependencies
-- Wire.h
-- Adafruit_Microbit.h
 
 * JOBS TO DO
 ** add reset mode

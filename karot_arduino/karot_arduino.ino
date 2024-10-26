@@ -1,6 +1,7 @@
 // Arduino is slave on I2C at address #4
 
 #include <Wire.h>
+#include <EEPROM.h>
 
 
 //// PIN NUMBER CONSTANTS
@@ -74,6 +75,15 @@ int errorCode = ERROR_CODE_NO_ERROR;
 
 
 
+//// ADDRESS FOR PERSISTENT MEMORY
+
+// NOTE: Each EEPROM location should be good for about 100,000 write
+// cycles. Maximum score on a four-stars-per-day star chart is a little over 120
+// per month, so 100,000 balls dropped is enough for more than 800 months.
+const int MEMORY_ADDRESS_BALLS_REMAINING = 0;
+
+
+
 void setup() {
 
   // initialize limit switch pins as input
@@ -97,6 +107,9 @@ void setup() {
   Wire.onReceive(receiveEvent);
   Wire.onRequest(requestEvent);
 
+  // retrieve persistent memory from EEPROM
+  ballsRemaining = EEPROM.read(MEMORY_ADDRESS_BALLS_REMAINING);
+
   // start serial for debugging output
   Serial.begin(9600);
 
@@ -104,13 +117,22 @@ void setup() {
   Serial.println(sizeof(int)); // gives 2
 }
 
+void updatePersistentMemory() {
+  EEPROM.update(MEMORY_ADDRESS_BALLS_REMAINING, ballsRemaining);
+}
+
 // function that executes whenever data is received from master
 void receiveEvent(int howMany) {
+  byte oldMode = deviceMode;
   while (Wire.available()) {
     // receive three bytes
     deviceMode = Wire.read();
     buttonAState = Wire.read();
     buttonBState = Wire.read();
+  }
+  // update ballsRemaining in EEPROM if we switched out of
+  if (oldMode == DEVICE_MODE_INPUT_REMAINDER && deviceMode != DEVICE_MODE_INPUT_REMAINDER) {
+    updatePersistentMemory();
   }
 }
 
@@ -219,6 +241,7 @@ void iterateReleaseSequence() {
         }
         if (ballsRemaining > 0) {
           ballsRemaining--;
+          updatePersistentMemory();
           if (ballsRemaining == 0) {
             winnerState = 1;
           }
